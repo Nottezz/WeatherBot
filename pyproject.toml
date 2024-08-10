@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "weatherbot"
+version = "0.1.0"
+description = "None"
+authors = ["Nottezz <driftworks2013@yandex.ru>"]
+readme = "README.md"
+repository = "https://gitlab.com/Nottezz/weatherbot"
+
+packages = [
+    {include = "weathebot"}
+]
+
+
+[tool.poetry.scripts]
+lint = "scripts:lint"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+python-dotenv = "^1.0.1"
+requests = "^2.32.3"
+pytelegrambotapi = "^4.22.0"
+pillow = "^10.4.0"
+black = "^24.8.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
