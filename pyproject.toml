@@ -13,6 +13,7 @@ packages = [
 
 [tool.poetry.scripts]
 lint = "scripts:lint"
+format = "scripts:format"
 
 [tool.poetry.dependencies]
 python = "^3.12"

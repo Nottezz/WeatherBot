@@ -23,3 +23,17 @@ def lint():
         "--color",
     ]
     black.patched_main()
+
+
+def format():
+    if len(sys.argv) > 1:
+        logger.warning("format not support arguments")
+        logger.warning("Ignoring arguments: %s", sys.argv[1:])
+
+    sys.argv = [
+        "black",
+        str(top_level_dir / "weathebot"),
+        "--config",
+        "./pyproject.toml",
+    ]
+    black.patched_main()
