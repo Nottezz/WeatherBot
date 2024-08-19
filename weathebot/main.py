@@ -5,40 +5,69 @@ import logging
 
 from dotenv import load_dotenv
 from helpers.generate import image_generate
+from openweather.request_to_api import WeatherRequest
+from telebot import types
 
 load_dotenv()
 
 bot = telebot.TeleBot(os.getenv("TOKEN"))
 
 loger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
 
 
 @bot.message_handler(commands=["start"])
 def send_welcome(message):
-    bot.send_message(message.chat.id, "Привет! Рад тебя видеть. Напиши название города")
+    keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
+    button_geo = types.KeyboardButton(
+        text="Отправить местоположение", request_location=True
+    )
+    keyboard.add(button_geo)
+    bot.send_message(
+        message.chat.id,
+        "Привет! "
+        "Рад тебя видеть. \n\n"
+        "Напиши название города или нажми на кнопку для отправки своего местоположения.",
+        reply_markup=keyboard,
+    )
     loger.info(message.chat)
 
 
 @bot.message_handler(content_types=["text"])
 def get_weather(message):
-    city = message.text.strip().lower()
-    base_url = "https://api.openweathermap.org/data/2.5"
-    url = f'{base_url}/weather?q={city}&appid={os.getenv("OPENWEATHER_API_KEY")}&units=metric'
-    response = requests.get(url)
-    loger.info(response.text)
+    openweather = WeatherRequest()
+    response = openweather.get_city(message)
 
     if response.status_code == 200:
         image_generate(response)
 
         bot.send_photo(
             message.chat.id,
-            caption=f"Погода в городе {city.title()}.",
+            caption="Данные предоставлены openweathermap.org.",
             photo=open("weather.png", "rb"),
         )
-        loger.info('Success')
+        loger.info("Success")
     else:
         bot.reply_to(message, "Вы ввели некорректное название города.")
+        loger.error(response.text)
+
+
+@bot.message_handler(content_types=["location"])
+def location(message):
+    openweather = WeatherRequest()
+    response = openweather.get_location(message)
+    if response.status_code == 200:
+        image_generate(response)
+        bot.send_photo(
+            message.chat.id,
+            caption="Данные предоставлены openweathermap.org.",
+            photo=open("weather.png", "rb"),
+        )
+        loger.info("Success")
+    else:
+        bot.send_message(message.chat.id, "Ошибка! Повторите ещё раз")
         loger.error(response.text)
 
 
