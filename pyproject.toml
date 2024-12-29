@@ -1,13 +1,14 @@
 [tool.poetry]
-name = "weatherbot"
+name = "WeatherBot"
 version = "0.1.0"
-description = "None"
-authors = ["Nottezz <driftworks2013@yandex.ru>"]
+description = "Telegram bot for weather information"
+authors = ["R00kie <driftworks2013@yandex.ru>"]
 readme = "README.md"
-repository = "https://gitlab.com/Nottezz/weatherbot"
+repository = "https://github.com/R00kie-dot/WeatherBot"
+package-mode = false
 
 packages = [
-    {include = "weathebot"}
+    {include = "weatherbot"}
 ]
 
 
@@ -21,8 +22,29 @@ python-dotenv = "^1.0.1"
 requests = "^2.32.3"
 pytelegrambotapi = "^4.22.0"
 pillow = "^10.4.0"
-black = "^24.8.0"
 
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.14.0"
+isort = "^5.13.2"
+black = "^24.10.0"
+types-requests = "^2.32.0.20241016"
+
+[tool.isort]
+multi_line_output = 3
+profile = "black"
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+
+[tool.mypy]
+python_version = "3.12"
+#disallow_untyped_defs = true
+disable_error_code = "annotation-unchecked"
+show_error_codes = true
+no_implicit_optional = true
+warn_unused_ignores = true
 
 [build-system]
 requires = ["poetry-core"]

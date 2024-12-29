@@ -1,8 +1,7 @@
-import os
-import telebot
-import requests
 import logging
+import os
 
+import telebot
 from dotenv import load_dotenv
 from helpers.generate import image_generate
 from openweather.request_to_api import WeatherRequest
@@ -13,9 +12,6 @@ load_dotenv()
 bot = telebot.TeleBot(os.getenv("TOKEN"))
 
 loger = logging.getLogger(__name__)
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
 
 
 @bot.message_handler(commands=["start"])
@@ -72,4 +68,8 @@ def location(message):
 
 
 if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    )
     bot.polling(none_stop=True)
