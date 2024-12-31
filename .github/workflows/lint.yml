@@ -3,10 +3,10 @@ name: Run Linter
 on:
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,6 +27,6 @@ jobs:
         run: |
           poetry install
 
-      - name: Run tests
+      - name: Run lint
         run: |
           poetry run lint

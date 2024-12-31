@@ -9,6 +9,8 @@ def image_generate(response):
     image = Image.new("RGB", (width, height), color=background_color)
     draw = ImageDraw.Draw(image)
 
+    city = response.json()["name"]
+    weather_description = response.json()["weather"][0]["description"]
     current_temperature = response.json()["main"]["temp"]
     feel_temperature = response.json()["main"]["feels_like"]
     wind_speed = response.json()["wind"]["speed"]
@@ -19,6 +21,8 @@ def image_generate(response):
     readable_sunset = datetime.datetime.fromtimestamp(sunset).strftime("%H:%M:%S")
 
     text = (
+        f"Город: {city}\n"
+        f"Погода: {weather_description}\n"
         f"Текущая температура: {current_temperature} {chr(0x00B0)}С\n"
         f"Ощущается как: {feel_temperature} {chr(0x00B0)}С\n\n"
         f"Скорость ветра: {wind_speed} м/c\n"

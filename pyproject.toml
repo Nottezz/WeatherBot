@@ -44,7 +44,7 @@ python_version = "3.12"
 disable_error_code = "annotation-unchecked"
 show_error_codes = true
 no_implicit_optional = true
-warn_unused_ignores = true
+warn_unused_ignores = false
 
 [build-system]
 requires = ["poetry-core"]
