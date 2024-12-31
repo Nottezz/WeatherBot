@@ -1,11 +1,15 @@
 import datetime
+import logging
 
 from PIL import Image, ImageDraw, ImageFont
+from requests import Response
+
+loger = logging.getLogger(__name__)
 
 
-def image_generate(response):
+def image_generate(response: Response) -> None:
     width, height = 800, 600
-    background_color = (255, 255, 255)  # Белый цвет
+    background_color = (255, 255, 255)
     image = Image.new("RGB", (width, height), color=background_color)
     draw = ImageDraw.Draw(image)
 
@@ -40,3 +44,4 @@ def image_generate(response):
     draw.text(position, text, font=font, fill=text_color)
 
     image.save("weather.png")
+    loger.info("Image successfully saved")

@@ -29,6 +29,7 @@ mypy = "^1.14.0"
 isort = "^5.13.2"
 black = "^24.10.0"
 types-requests = "^2.32.0.20241016"
+pytelegrambotapi = {extras = ["types"], version = "^4.25.0"}
 
 [tool.isort]
 multi_line_output = 3
@@ -40,11 +41,11 @@ include = '\.pyi?$'
 
 [tool.mypy]
 python_version = "3.12"
-#disallow_untyped_defs = true
+disallow_untyped_defs = true
 disable_error_code = "annotation-unchecked"
 show_error_codes = true
 no_implicit_optional = true
-warn_unused_ignores = false
+warn_unused_ignores = true
 
 [build-system]
 requires = ["poetry-core"]

@@ -5,8 +5,8 @@ import telebot  # type: ignore
 from dotenv import load_dotenv
 from telebot import types
 
-from weatherbot.helpers.generate import image_generate  # type: ignore
-from weatherbot.openweather.request_to_api import WeatherRequest  # type: ignore
+from weatherbot.helpers.generate import image_generate
+from weatherbot.openweather.request_to_api import WeatherRequest
 
 load_dotenv()
 
@@ -16,7 +16,7 @@ loger = logging.getLogger(__name__)
 
 
 @bot.message_handler(commands=["start"])
-def send_welcome(message):
+def send_welcome(message: types.Message) -> None:
     keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
     button_geo = types.KeyboardButton(
         text="Отправить местоположение", request_location=True
@@ -33,7 +33,7 @@ def send_welcome(message):
 
 
 @bot.message_handler(commands=["help"])
-def send_help_message(message):
+def send_help_message(message: types.Message) -> None:
     keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
     button_geo = types.KeyboardButton(
         text="Отправить местоположение", request_location=True
@@ -53,7 +53,7 @@ def send_help_message(message):
 
 
 @bot.message_handler(content_types=["text"])
-def get_weather(message):
+def get_weather(message: types.Message) -> None:
     openweather = WeatherRequest()
     response = openweather.get_city(message)
 
@@ -72,7 +72,7 @@ def get_weather(message):
 
 
 @bot.message_handler(content_types=["location"])
-def location(message):
+def location(message: types.Message) -> None:
     openweather = WeatherRequest()
     response = openweather.get_location(message)
     if response.status_code == 200:
@@ -88,7 +88,7 @@ def location(message):
         loger.error(response.text)
 
 
-def main():
+def main() -> None:
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(module)s - %(levelname)s - %(message)s",
