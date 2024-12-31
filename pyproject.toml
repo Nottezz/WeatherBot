@@ -17,7 +17,7 @@ lint = "scripts:lint"
 format = "scripts:format"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.10"
 python-dotenv = "^1.0.1"
 requests = "^2.32.3"
 pytelegrambotapi = "^4.22.0"
