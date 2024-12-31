@@ -3,8 +3,8 @@ import os
 
 import telebot  # type: ignore
 from dotenv import load_dotenv
-from helpers.generate import image_generate  # type: ignore
-from openweather.request_to_api import WeatherRequest  # type: ignore
+from weatherbot.helpers.generate import image_generate  # type: ignore
+from weatherbot.openweather.request_to_api import WeatherRequest  # type: ignore
 from telebot import types
 
 load_dotenv()
@@ -67,9 +67,13 @@ def location(message):
         loger.error(response.text)
 
 
-if __name__ == "__main__":
+def main():
     logging.basicConfig(
         level=logging.INFO,
         format="%(asctime)s - %(module)s - %(levelname)s - %(message)s",
     )
     bot.polling(none_stop=True)
+
+
+if __name__ == "__main__":
+    main()
