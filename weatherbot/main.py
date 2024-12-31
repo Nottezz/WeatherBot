@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from telebot import types
 
 from weatherbot.helpers.generate import image_generate
+from weatherbot.helpers.keyboard import keyboard_help, keyboard_start
 from weatherbot.openweather.request_to_api import WeatherRequest
 
 load_dotenv()
@@ -17,37 +18,22 @@ loger = logging.getLogger(__name__)
 
 @bot.message_handler(commands=["start"])
 def send_welcome(message: types.Message) -> None:
-    keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-    button_geo = types.KeyboardButton(
-        text="Отправить местоположение", request_location=True
-    )
-    keyboard.add(button_geo)
     bot.send_message(
         message.chat.id,
         "Привет! "
         "Рад тебя видеть. \n\n"
         "Напиши название города или нажми на кнопку для отправки своего местоположения.",
-        reply_markup=keyboard,
+        reply_markup=keyboard_start(),
     )
     loger.info(message.chat)
 
 
 @bot.message_handler(commands=["help"])
 def send_help_message(message: types.Message) -> None:
-    keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
-    button_geo = types.KeyboardButton(
-        text="Отправить местоположение", request_location=True
-    )
-    button_github = types.KeyboardButton(
-        text="Изучить проект на GitHub",
-        web_app=types.WebAppInfo(url="https://github.com/R00kie-dot/WeatherBot"),
-    )
-    keyboard.add(button_geo)
-    keyboard.add(button_github)
     bot.send_message(
         message.chat.id,
         "Напиши название города или нажми на кнопку для отправки своего местоположения. Или можете посмотреть на меня изнутри 😉",
-        reply_markup=keyboard,
+        reply_markup=keyboard_help(),
     )
     loger.info(message.chat)
 
