@@ -3,9 +3,10 @@ import os
 
 import telebot  # type: ignore
 from dotenv import load_dotenv
+from telebot import types
+
 from weatherbot.helpers.generate import image_generate  # type: ignore
 from weatherbot.openweather.request_to_api import WeatherRequest  # type: ignore
-from telebot import types
 
 load_dotenv()
 
