@@ -18,7 +18,7 @@ def lint():
         logger.warning("lint not support arguments")
         logger.warning("Ignoring arguments: %s", sys.argv[1:])
 
-    logger.info("Running isort")
+    logger.info("Step 1: Running isort")
     sys.argv = [
         "isort",
         str(TOP_LEVEL_DIR / "weatherbot"),
@@ -28,7 +28,7 @@ def lint():
     isort_main.main()
     logger.info("Isort check passed")
 
-    logger.info("Running black")
+    logger.info("Step 2: Running black")
     sys.argv = [
         "black",
         str(TOP_LEVEL_DIR / "weatherbot"),
@@ -45,7 +45,7 @@ def lint():
             raise
     logger.info("Black check passed")
 
-    logger.info("Running mypy")
+    logger.info("Step 3: Running mypy")
 
     mypy_main(
         args=[
