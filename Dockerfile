@@ -4,7 +4,7 @@ ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 
 
-WORKDIR /WeatherBot
+WORKDIR /app
 
 RUN pip install --upgrade pip wheel "poetry==1.8.4"
 
