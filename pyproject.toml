@@ -30,6 +30,7 @@ isort = "^5.13.2"
 black = "^24.10.0"
 types-requests = "^2.32.0.20241016"
 pytelegrambotapi = {extras = ["types"], version = "^4.25.0"}
+typer = "^0.16.0"
 
 [tool.isort]
 multi_line_output = 3
