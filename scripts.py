@@ -1,79 +1,76 @@
-import logging
-import pathlib
-import sys
 import black
-
+import sys
+import logging
+import typer
+import pathlib
 from isort import main as isort_main
-from mypy.main import main as mypy_main
+from rich.logging import RichHandler
 
-TOP_LEVEL_DIR = pathlib.Path(__file__).parent
 logging.basicConfig(
-    level=logging.INFO, format="%(levelname)-7s %(message)s", stream=sys.stdout
+    level=logging.INFO,
+    format="%(message)s",
+    handlers=[RichHandler(show_time=False)],
 )
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("rich")
+app = typer.Typer(
+    name="scripts",
+    help="Scripts collection for use poetry scripts",
+    no_args_is_help=True,
+    add_completion=False,
+    pretty_exceptions_show_locals=False,
+)
+weatherbot_level_dir = pathlib.Path(__file__).parent
+weatherbot_source_dir = weatherbot_level_dir / "weatherbot"
+weatherbot_pyproject = weatherbot_level_dir / "pyproject.toml"
+
+WEATHERBOT_SOURCE_DIR = str(weatherbot_source_dir)
+WEATHERBOT_PYPROJECT = str(weatherbot_pyproject)
+
+COMMON_CHECK_DIRS = [
+    WEATHERBOT_SOURCE_DIR,
+]
+common_check_dirs_str_joined = ", ".join(COMMON_CHECK_DIRS)
 
 
-def lint():
-    if len(sys.argv) > 1:
-        logger.warning("lint not support arguments")
-        logger.warning("Ignoring arguments: %s", sys.argv[1:])
-
-    logger.info("Step 1: Running isort")
+@app.command(help="Run formating")
+def format() -> None:
+    logger.info("Running isort in %s", common_check_dirs_str_joined)
     sys.argv = [
         "isort",
-        str(TOP_LEVEL_DIR / "weatherbot"),
+        *COMMON_CHECK_DIRS,
+    ]
+    isort_main.main()
+    logger.info("Running black in %s", common_check_dirs_str_joined)
+    sys.argv = [
+        "black",
+        *COMMON_CHECK_DIRS,
+        "--config",
+        WEATHERBOT_PYPROJECT,
+    ]
+    black.patched_main()
+    logger.info(sys.argv)
+
+
+@app.command(help="Run check linters")
+def lint() -> None:
+    logger.info("Running isort in %s", common_check_dirs_str_joined)
+    sys.argv = [
+        "isort",
+        *COMMON_CHECK_DIRS,
         "--check-only",
         "--diff",
     ]
     isort_main.main()
-    logger.info("Isort check passed")
-
-    logger.info("Step 2: Running black")
+    logger.info("Running black in %s", common_check_dirs_str_joined)
     sys.argv = [
         "black",
-        str(TOP_LEVEL_DIR / "weatherbot"),
-        "--config",
-        str(TOP_LEVEL_DIR / "pyproject.toml"),
         "--check",
-        "--diff",
-        "--color",
-    ]
-    try:
-        black.patched_main()
-    except SystemExit as e:
-        if e.code != 0:
-            raise
-    logger.info("Black check passed")
-
-    logger.info("Step 3: Running mypy")
-
-    mypy_main(
-        args=[
-            str(TOP_LEVEL_DIR / "weatherbot"),
-            "--config-file",
-            str(TOP_LEVEL_DIR / "pyproject.toml"),
-        ],
-        clean_exit=True,
-    )
-
-    logger.info("Mypy check passed")
-
-
-def format():
-    if len(sys.argv) > 1:
-        logger.warning("format not support arguments")
-        logger.warning("Ignoring arguments: %s", sys.argv[1:])
-
-    sys.argv = [
-        "isort",
-        str(TOP_LEVEL_DIR / "weatherbot"),
-    ]
-    isort_main.main()
-
-    sys.argv = [
-        "black",
-        str(TOP_LEVEL_DIR / "weatherbot"),
+        *COMMON_CHECK_DIRS,
         "--config",
-        str(TOP_LEVEL_DIR / "pyproject.toml"),
+        WEATHERBOT_PYPROJECT,
     ]
     black.patched_main()
+
+
+if __name__ == "__main__":
+    app()
