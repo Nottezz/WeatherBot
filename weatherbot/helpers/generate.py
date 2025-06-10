@@ -33,7 +33,7 @@ def image_generate(response: Response) -> None:
         f"Рассвет: {readable_sunrise}\n"
         f"Закат: {readable_sunset}"
     )
-    font = ImageFont.truetype("arial.ttf", 35)
+    font = ImageFont.truetype("./weatherbot/helpers/fonts/arial.ttf", 35)
     text_bbox = draw.textbbox((0, 0), text, font=font)
 
     text_width = text_bbox[2] - text_bbox[0]

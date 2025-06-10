@@ -79,6 +79,7 @@ def main() -> None:
         level=logging.INFO,
         format="%(asctime)s - %(module)s - %(levelname)s - %(message)s",
     )
+    loger.info("Run bot")
     bot.polling(none_stop=True)
 
 
